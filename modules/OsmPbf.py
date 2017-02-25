@@ -20,8 +20,19 @@
 ###########################################################################
 
 import time
+from datetime import datetime
 import traceback
+import config
 from imposm.parser.simple import OSMParser
+
+try:
+    # For Python 3.0 and later
+    import subprocess
+    getstatusoutput = subprocess.getstatusoutput
+except:
+    # Fall back to Python 2
+    import commands
+    getstatusoutput = commands.getstatusoutput
 
 ###########################################################################
 
@@ -35,12 +46,27 @@ class OsmPbfReader:
 
     def log(self, txt):
         self._logger.log(txt)
-    
+
     def __init__(self, pbf_file, logger = dummylog()):
         self._pbf_file = pbf_file
         self._logger   = logger
         self._got_error = False
 
+    def timestamp(self):
+        try:
+            # Try to get timestamp from metadata
+            res = getstatusoutput("%s %s --out-timestamp'" % (config.bin_osmconvert, self._pbf_file))
+            if not res[0]:
+                return datetime.strptime(res[1], '%Y-%m-%dT%H:%M:%S.%fZ')
+        except:
+            try:
+                # Compute max timestamp from data
+                res = getstatusoutput("%s %s --out-statistics | grep 'timestamp max'" % (config.bin_osmconvert, self._pbf_file))
+                if not res[0]:
+                    s = res[1].split(' ')[1]
+                    return datetime.strptime(s, '%Y-%m-%dT%H:%M:%S.%fZ')
+            except:
+                return
 
     def CopyTo(self, output):
         self._output = output
