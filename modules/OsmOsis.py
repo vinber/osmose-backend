@@ -21,6 +21,7 @@
 
 import psycopg2
 import psycopg2.extensions
+import dateutil.tz
 
 ###########################################################################
 ## Reader / Writer
@@ -49,6 +50,7 @@ class OsmOsis:
     def timestamp(self):
         self._PgCurs.execute('SELECT GREATEST((SELECT MAX(tstamp) FROM nodes), (SELECT MAX(tstamp) FROM ways), (SELECT MAX(tstamp) FROM relations))')
         (timestamp,) = self._PgCurs.fetchone()
+        timestamp = timestamp.astimezone(dateutil.tz.gettz('UTC'))
         return timestamp
 
     def NodeGet(self, NodeId):
