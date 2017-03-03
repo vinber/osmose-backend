@@ -32,7 +32,7 @@ CREATE TABLE nodes (
     id bigint NOT NULL,
     version int NOT NULL,
     user_id int NOT NULL,
-    tstamp timestamp without time zone NOT NULL,
+    tstamp timestamp with time zone NOT NULL,
     changeset_id bigint NOT NULL,
     tags hstore
 );
@@ -45,7 +45,7 @@ CREATE TABLE ways (
     id bigint NOT NULL,
     version int NOT NULL,
     user_id int NOT NULL,
-    tstamp timestamp without time zone NOT NULL,
+    tstamp timestamp with time zone NOT NULL,
     changeset_id bigint NOT NULL,
     tags hstore,
     nodes bigint[],
@@ -66,7 +66,7 @@ CREATE TABLE relations (
     id bigint NOT NULL,
     version int NOT NULL,
     user_id int NOT NULL,
-    tstamp timestamp without time zone NOT NULL,
+    tstamp timestamp with time zone NOT NULL,
     changeset_id bigint NOT NULL,
     tags hstore
 );
