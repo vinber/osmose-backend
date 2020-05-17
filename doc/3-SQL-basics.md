@@ -1,6 +1,6 @@
 # Analyzer based on SQL query - The basics
 
-The database is a PostgreSQL with PostGIS spatial extension and hstore. It is know as [Osmosis](https://wiki.openstreetmap.org/wiki/Osmosis) schema, and loaded by the tool of the same name.
+The database is a PostgreSQL with PostGIS spatial extension and hstore. It is know as [Osmosis](https://wiki.openstreetmap.org/wiki/Osmosis) schema and loaded by the tool of the same name.
 
 
 ## Database schema
@@ -12,7 +12,7 @@ All table have in common:
 * `version`: integer
 * `user_id`: integer, the value may not be available
 * `tstamp`: timestamp without time zone
-* `changeset_id`: bigint,
+* `changeset_id`: bigint
 * `tags`: hstore
 
 The **nodes** have the location in the `geom` field:
@@ -131,8 +131,8 @@ ST_AsText(ST_Centroid(ways.linestring))
 ```
 
 SQL Helpers are available to compute a location from OSM objects:
-* `way_locate(linestring)`: extract position from cental point on the linestring, avoid joining on `nodes`.
-* `relation_locate(id)`: loop over relation members to extraction a location.
+* `way_locate(linestring)`: extract position from central point on the linestring, avoid joining on `nodes`.
+* `relation_locate(id)`: loop over relation members to extract a location.
 * `any_locate(type N/W/R, id)`: get location of variable object types.
 * `array_locate(array[type N/W/R, id])`: get location of array of variable object types.
 
@@ -163,7 +163,7 @@ FROM
 #### Common Factorized tables
 May analyzers work on same topic. To avoid recomputing intermediate tables many time, and not always on the ways in interpreting OSM tags, some generic tables are available. There are computed only on request, but reused once it is done.
 
-The available common tables are (see full definition in Analyser_Osmosis.py):
+The available common tables are (see full definition in (Analyser_Osmosis.py)[https://github.com/osm-fr/osmose-backend/blob/master/analysers/Analyser_Osmosis.py]):
 * highways: with tags normalization, levels classification and re projected in local country _projection_.
 * highway_ends: the start and ends of all highways ways.
 * buildings: from ways (and not from multipolygon relations), with tags normalization and re-projected in local country _projection_ as _polygons_.
